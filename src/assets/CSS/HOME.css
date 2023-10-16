@@ -1,0 +1,78 @@
+.ColeccionNueva {
+    text-align: center;
+}
+
+.ColeccionNueva h2 {
+    margin: 5px;
+}
+
+.ColeccionNueva h3 {
+    margin: 5px;
+}
+
+.ColeccionNueva a {
+    text-decoration: none;
+    color: black;
+}
+
+.ColeccionNueva a:hover {
+    text-decoration: none;
+    color: #ffd700;
+}
+
+.ArteEscultura {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Imagen {
+    flex: 1;
+    margin-left: 15px;
+    margin-right: 15px;
+    text-align: center;
+    max-width: 400%;
+    overflow: hidden;
+    position: relative;
+}
+
+.Imagen img {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    transition: filter 80s ease, transform 3s ease;
+}
+
+.Imagen img:hover {
+    filter: brightness(75%);
+    transform: scale(1.1);
+    text-shadow: 1px 1px 10px rgb(255, 255, 255);
+}
+
+.Overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    padding: 10px;
+    z-index: 1;
+}
+
+.Overlay:hover {
+    filter: brightness(150%);
+    text-shadow: 1px 1px 10px rgb(255, 255, 255);
+}
+
+.Overlay h2 {
+    margin: 0;
+}
+
+.mi-componente {
+    opacity: 0;
+    transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Ajusta la duración y el timing function */
+  }
+  
+  .mi-componente.visible {
+    opacity: 1;
+  }

@@ -1,0 +1,73 @@
+.AdminInfo-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #f7f7f7;
+  }
+  
+  .EditNombre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .EditNombre button, .EditAcercaDe button{
+    width: auto;
+    height: auto;
+    background-color: aliceblue;
+    font-size: 16px;
+    letter-spacing: 2px;
+    /* margin-top: 10px; */
+    padding: 5px 20px;
+  }
+  
+  .EditNombre button:hover, .ditAcercaDe button:hover {
+    background-color: #ffcd94;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+    padding-top: 5px;
+  }
+  
+  .EditAcercaDe {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .EditAcercaDe label {
+    font-size: 18px;
+  }
+  
+  textarea {
+    resize: both;
+    overflow: auto;
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  .EditAcercaDe p {
+    font-size: 16px;
+    margin-top: 10px;
+    white-space: pre-wrap;
+  }
+
+  input[type="text" i] {
+    padding: 5px;
+    margin-bottom: 4px;
+}
+
+.Body3{
+  display: flex;
+  flex-direction: row;
+}

@@ -1,0 +1,11 @@
+.Videos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+    justify-items: center;
+}
+
+.Videos iframe {
+    width: 70%;
+    height: 315px;
+}

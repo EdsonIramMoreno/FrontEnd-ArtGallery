@@ -1,0 +1,59 @@
+.Inicio {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.Mosaico img {
+    max-width: 100%;
+    height: 465px;
+    width: 465;
+}
+
+.Login {
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.INPUTS input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: beige;
+}
+
+.INPUTS input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: beige;
+
+}
+
+input[type="submit"] {
+    width: auto;
+    height: 50px;
+    background-color: beige;
+    font-size: large;
+    letter-spacing: 10px;
+}
+
+input[type="submit"]:hover {
+    width: auto;
+    height: 50px;
+    background-color: #ffcd94;
+    font-size: large;
+    box-shadow: 3px 3px 1px rgb(0, 0, 0);
+}
+
+input[type="text"]::placeholder{
+    letter-spacing: 10px;
+}
+
+input[type="password"]::placeholder{
+    letter-spacing: 10px;
+}
