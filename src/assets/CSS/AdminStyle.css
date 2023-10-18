@@ -1,73 +1,241 @@
 .AdminInfo-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-    flex-wrap: nowrap;
-    text-align: center;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #f7f7f7;
-  }
-  
-  .EditNombre {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
-  }
-  
-  .EditNombre button, .EditAcercaDe button{
-    width: auto;
-    height: auto;
-    background-color: aliceblue;
-    font-size: 16px;
-    letter-spacing: 2px;
-    /* margin-top: 10px; */
-    padding: 5px 20px;
-  }
-  
-  .EditNombre button:hover, .ditAcercaDe button:hover {
-    background-color: #ffcd94;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
-    padding-top: 5px;
-  }
-  
-  .EditAcercaDe {
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .EditAcercaDe label {
-    font-size: 18px;
-  }
-  
-  textarea {
-    resize: both;
-    overflow: auto;
-    width: 100%;
-    min-height: 100px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-top: 10px;
-  }
-  
-  .EditAcercaDe p {
-    font-size: 16px;
-    margin-top: 10px;
-    white-space: pre-wrap;
-  }
-
-  input[type="text" i] {
-    padding: 5px;
-    margin-bottom: 4px;
-}
-
-.Body3{
+  height: 100%;
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
+  align-content: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+}
+
+.Bienvenida-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+}
+
+.Foto-Nmb-card {
+  height: 100%;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  align-items: center;
+  justify-content: flex-start;
+  border-right: 4px groove black;
+  /* Establece el borde a la derecha y color negro */
+}
+
+.AdminInfo-card h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.EditNombre {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.EditNombre button,
+.EditAcercaDe button {
+  width: auto;
+  height: auto;
+  background-color: aliceblue;
+  font-size: 16px;
+  letter-spacing: 2px;
+  padding: 5px 20px;
+}
+
+.EditNombre button:hover,
+.EditAcercaDe button:hover {
+  background-color: #ffcd94;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+  padding-top: 5px;
+}
+
+.artista-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+  object-fit: cover;
+}
+
+.EditAcercaDe {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+}
+
+.EditAcercaDe label {
+  font-size: 18px;
+}
+
+textarea {
+  resize: both;
+  overflow: auto;
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 10px;
+  background-color: beige;
+}
+
+.EditAcercaDe p {
+  max-height: 100%;
+  font-size: 16px;
+  margin-top: 10px;
+  white-space: pre-wrap;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 20px;
+  background-color: beige;
+  margin-top: 15px;
+}
+
+.Body3 {
+  width: 100%;
+  height: 100%;
+  /* display: flex; */
+}
+
+.Body2 {
+  min-height: 100vh;
+  /* display: flex; */
+  /* align-items: stretch; */
+  /* justify-content: flex-start; */
+  /* align-content: center; */
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 10px;
+  background-color: rgb(255, 253, 230);
+}
+
+.EditNombre button {
+  border-radius: 0px;
+  width: auto;
+  height: auto;
+  background-color: beige;
+  font-size: 80%;
+  letter-spacing: 5px;
+  border-top: 2px groove rgb(179, 179, 179);
+  border-left: 2px groove rgb(179, 179, 179);
+  border-bottom: 2px groove rgb(0, 0, 0);
+  border-right: 2px groove black;
+  border-style:solid;
+}
+
+.EditHistoria button {
+  border-radius: 0px;
+  width: auto;
+  height: auto;
+  background-color: beige;
+  font-size: 80%;
+  letter-spacing: 5px;
+  border-top: 2px groove rgb(179, 179, 179);
+  border-left: 2px groove rgb(179, 179, 179);
+  border-bottom: 2px groove rgb(0, 0, 0);
+  border-right: 2px groove black;
+  border-style:solid;
+}
+
+.EditHistoria button:hover {
+  box-shadow: 3px 3px 1px rgb(0, 0, 0);
+  background-color: #ffcd94;
+  border-radius: 0px;
+  border-top: 2px groove rgb(179, 179, 179);
+  border-left: 2px groove rgb(179, 179, 179);
+  border-bottom: 2px groove rgb(0, 0, 0);
+  border-right: 2px groove black;
+  border-style:solid;
+}
+
+.EditNombre button:hover {
+  box-shadow: 3px 3px 1px rgb(0, 0, 0);
+  background-color: #ffcd94;
+  border-radius: 0px;
+  border-top: 2px groove rgb(179, 179, 179);
+  border-left: 2px groove rgb(179, 179, 179);
+  border-bottom: 2px groove rgb(0, 0, 0);
+  border-right: 2px groove black;
+  border-style:solid;
+}
+
+.EditHistoria-card p {
+  overflow: auto;
+  height: 350px;
+  background-color: rgb(255, 201, 102, 0.3);
+  box-shadow: 5px 5px 1px rgb(0, 0, 0);
+  text-align: left;
+  border-style: 1px flat;
+}
+
+.EditHistoriaLeft {
+  width: 80%;
+  max-height: auto;
+}
+
+.EditHistoriaLeft h2 {
+  padding-bottom: 0px;
+  margin-bottom: 5px;
+  margin-top: 0px;
+}
+
+.EditAcercaDe{
+  overflow: auto;
+}
+
+.EditArtworkiaLeft{
+  width: 80%;
+  max-height: auto;
+}
+
+.GaleriaAdm {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.Imagenes-card{
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+.GaleriaAdm .arte-image {
+  width: 200px;
+  height: 200px;
+  margin: 10px;
+  object-fit: cover;
+  border: 2px solid #000;
+}
+
+.GaleriaAdm .arte-image:hover {
+
+  border: 2px solid #000;
+}
+
+
+img {
+  object-fit: cover;
+  width: 200px;
+  height: 200px;
+  box-shadow: 5px 5px 1px rgb(0, 0, 0);
+  margin: 10px;
 }
