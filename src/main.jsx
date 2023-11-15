@@ -10,6 +10,5 @@ import './assets/CSS/NavbarStyle.css'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <NavBar />
-    <Home />
   </React.StrictMode>,
 )

@@ -21,34 +21,30 @@ function Contacto() {
     }, []);
 
     return (
-        <React.StrictMode>
-            <div className={`mi-componente ${visible ? 'visible' : ''}`}>
-                <div className='Body2'>
-                    {/* <NavBar /> */}
-                    <div className="Contenido">
+        <div className={`mi-componente ${visible ? 'visible' : ''}`}>
+            <div className='Body2'>
+                {/* <NavBar /> */}
+                <div className="Contenido">
                     <div className='Pag-name'>
                         <h2>CONTACTO</h2>
                     </div>
 
-                        <div className="ContactoClass Margin-Pg">
-                            <div className="Siluetas">
-                                <img src={SiluetasImg} alt="Imagen" />
-                            </div>
-
-                            <div className="Contactar">
-                                <form action="">
-                                    <input type="text" name="" id="" placeholder="CORREO" />
-                                    <input type="text" name="" id="" placeholder="MENSAJE" />
-                                    <input type="submit" value="ENVIAR" />
-                                </form>
-                            </div>
+                    <div className="ContactoClass Margin-Pg">
+                        <div className="Siluetas">
+                            <img src={SiluetasImg} alt="Imagen" />
                         </div>
 
-                        <Footer />
+                        <div className="Contactar">
+                            <form action="">
+                                <input type="text" name="" id="" placeholder="CORREO" />
+                                <input type="text" name="" id="" placeholder="MENSAJE" />
+                                <input type="submit" value="ENVIAR" />
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </React.StrictMode>
+        </div>
     )
 }
 

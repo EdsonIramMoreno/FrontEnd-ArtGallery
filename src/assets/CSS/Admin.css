@@ -1,0 +1,12 @@
+.collapsible-menu {
+    display: block; /* or "flex" or "grid" based on your layout */
+    transition: height 0.3s ease; /* add smooth transition effect */
+    overflow: hidden;
+    height: auto; /* set to the desired initial height or "auto" */
+  }
+  
+  .collapsible-menu.collapsed {
+    height: 0;
+    overflow: hidden;
+  }
+  

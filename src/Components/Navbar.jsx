@@ -5,7 +5,8 @@ import AcercaDe from './AcercaDe';
 import Artwork from './Artwork';
 import Media from './Media';
 import Contacto from './Contacto';
-import Admin from './Admin';
+import Admin from './AdminComponents/Admin';
+import Details from './ObraDetails'
 
 import {
   BrowserRouter as Router,
@@ -20,7 +21,7 @@ function NavBar() {
   return (
     <Router>
       <nav className="ClassNavBar">
-        <li className='NombreNav'><Link to="/LogAdmin">NOMBRE</Link></li>
+        <li className='NombreNav'><Link to="/Home">NOMBRE</Link></li>
         <ul className="menu">
           <li><Link to="/Home">HOME</Link></li>
           <li><Link to="/AcercaDe">ACERCA DE</Link></li>
@@ -28,7 +29,7 @@ function NavBar() {
           <li><Link to="/Media">MEDIA</Link></li>
           <li><Link to="/Contacto">CONTACTO</Link></li>
           {/* Eliminar despues */}
-          <li><Link to="/Administracion">admin</Link></li>
+
         </ul>
       </nav>
 
@@ -39,6 +40,9 @@ function NavBar() {
         <Route path="/Artwork" element={<Artwork />}></Route>
         <Route path="/Media" element={<Media />}></Route>
         <Route path="/Contacto" element={<Contacto />}></Route>
+
+
+        <Route path="/details/:id/:name/:image" element={<Details />} />
 
         {/* Eliminar despues */}
         <Route path="/Administracion" element={<Admin />}></Route>

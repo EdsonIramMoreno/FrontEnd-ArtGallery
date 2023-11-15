@@ -1,36 +1,34 @@
 import React from 'react';
+import Video from './Video.jsx'
+import '../assets/CSS/Video.css';
 
 function VideoComponent() {
   return (
     <div className="Videos">
-      <iframe
+
+      <Video
         src="https://www.youtube.com/embed/jM8pyBUU-eE?si=MsqYjiIzYpQ7-LJz"
         title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-      ></iframe>
-      <iframe
-        src="https://www.youtube.com/embed/JpY_Ydck0bY?si=4hjP2oDAj25OV_Ka"
+
+      />
+
+      <Video
+        src="https://www.youtube.com/embed/jM8pyBUU-eE?si=MsqYjiIzYpQ7-LJz"
         title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-      ></iframe>
-      <iframe
-        src="https://www.youtube.com/embed/RoZN7FDruwE?si=4pP8PLcwe3ENMsZR"
+
+      />
+
+      <Video
+        src="https://www.youtube.com/embed/jM8pyBUU-eE?si=MsqYjiIzYpQ7-LJz"
         title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-      ></iframe>
-      <iframe
-        src="https://www.youtube.com/embed/RoZN7FDruwE?si=4pP8PLcwe3ENMsZR"
+
+      />
+
+      <Video
+        src="https://www.youtube.com/embed/jM8pyBUU-eE?si=MsqYjiIzYpQ7-LJz"
         title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-      ></iframe>
+
+      />
     </div>
   );
 }

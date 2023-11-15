@@ -1,0 +1,10 @@
+footer {
+    position: fixed;
+    bottom: -100px; /* Initially hide the footer below the viewport */
+    left: 0;
+    width: 100%;
+    background-color: #f0f0f0;
+    padding: 10px;
+    text-align: center;
+    transition: bottom 0.3s ease; /* Add a smooth transition effect */
+  }
