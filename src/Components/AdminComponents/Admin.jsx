@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import AdminInfo from '../AdminComponents/AdminInfo';
-import AddArtWork from '../AdminComponents/AddArtWork';
-import AddMedia from '../AdminComponents/AddMedia';
-import AddRedSocial from '../AdminComponents/AddRedSocial';
+import ArtWorkAdmin from '../AdminComponents/ArtWorkAdmin';
+import MediaAdmin from './MediaAdmin';
+import RedSocialAdmin from './RedSocialAdmin';
 import CorreoContacto from '../AdminComponents/CorreoContacto';
 import '../../assets/CSS/Admin.css';
 
 function Admin() {
   const [visible, setVisible] = useState(false);
+
   const [menuVisibleAcercaDe, setmenuVisibleAcercaDe] = useState(false);
-  const [menuVisibleAddArtWork, setmenuVisibleAddArtWork] = useState(false);
-  const [menuVisibleAddMedia, setmenuVisibleAddMedia] = useState(false);
+  const [menuVisibleArtWorkAdmin, setmenuVisibleArtWorkAdmin] = useState(false);
+  const [menuVisibleMediaAdmin, setmenuVisibleMediaAdmin] = useState(false);
   const [menuVisibleRedSocial, setmenuVisibleRedSocial] = useState(false);
   const [menuVisibleCorreoContacto, setmenuVisibleCorreoContacto] = useState(false);
 
+  const [currentSection, setCurrentSection] = useState('ADMINISTRADOR');
+
   useEffect(() => {
-    // Simulate a delay before showing the component
     const timeout = setTimeout(() => {
       setVisible(true);
     }, 100);
@@ -25,73 +27,80 @@ function Admin() {
     };
   }, []);
 
-  const toggleMenuAcercaDe = () => {
-    setmenuVisibleAcercaDe(!menuVisibleAcercaDe);
-  };
+  const MenuToggle = ({ onClick, isVisible, buttonText, sectionName }) => (
+    <div className="menu-toggle-container">
+      <button className="menu-toggle" onClick={() => handleMenuToggle(onClick, isVisible, sectionName)}>
+        {isVisible ? `Cerrar ${buttonText}` : `Abrir ${buttonText}`}
+      </button>
+    </div>
+  );
 
-  const toggleMenuAddArtWork = () => {
-    setmenuVisibleAddArtWork(!menuVisibleAddArtWork);
-  };
+  const handleMenuToggle = (menuSetter, isVisibleState, sectionName) => {
+    // Oculta todos los menús
+    setmenuVisibleAcercaDe(false);
+    setmenuVisibleArtWorkAdmin(false);
+    setmenuVisibleMediaAdmin(false);
+    setmenuVisibleRedSocial(false);
+    setmenuVisibleCorreoContacto(false);
 
-  const toggleMenuAddMedia = () => {
-    setmenuVisibleAddMedia(!menuVisibleAddMedia);
-  };
+    // Muestra u oculta el menú correspondiente
+    menuSetter(!isVisibleState);
 
-  const toggleMenuRedSocial = () => {
-    setmenuVisibleRedSocial(!menuVisibleRedSocial);
-  };
-
-  const toggleMenuCorreoContacto = () => {
-    setmenuVisibleCorreoContacto(!menuVisibleCorreoContacto);
+    // Actualiza la sección actual
+    setCurrentSection(isVisibleState ? 'ADMINISTRADOR' : sectionName);
   };
 
   return (
     <div className={`mi-componente ${visible ? 'visible' : ''}`}>
       <div className='Body2'>
-        <div className="Contenido">
-          <div className='Pag-name'>
-            <h2>ADMINISTRADOR</h2>
+        <div className='Pag-name'>
+          <h2>{currentSection}</h2>
+        </div>
+        <div className="ContenidoAdm">
+          <div className="buttons-container">
+          <hr/>
+            <MenuToggle
+              onClick={() => handleMenuToggle(setmenuVisibleAcercaDe, menuVisibleAcercaDe, 'Acerca De')}
+              isVisible={menuVisibleAcercaDe}
+              buttonText="Acerca De"
+              sectionName="ADMINISTRADOR - ACERCA DE"
+            />
+            <hr/>
+            <MenuToggle
+              onClick={() => handleMenuToggle(setmenuVisibleArtWorkAdmin, menuVisibleArtWorkAdmin, 'ArtWork')}
+              isVisible={menuVisibleArtWorkAdmin}
+              buttonText="ArtWork"
+              sectionName="ADMINISTRADOR - ARTWORK"
+            />
+            <hr/>          
+            <MenuToggle
+              onClick={() => handleMenuToggle(setmenuVisibleMediaAdmin, menuVisibleMediaAdmin, 'Media')}
+              isVisible={menuVisibleMediaAdmin}
+              buttonText="Media"
+              sectionName="ADMINISTRADOR - MEDIA"
+            />
+            <hr/>
+            <MenuToggle
+              onClick={() => handleMenuToggle(setmenuVisibleRedSocial, menuVisibleRedSocial, 'Redes')}
+              isVisible={menuVisibleRedSocial}
+              buttonText="Redes"
+              sectionName="ADMINISTRADOR - REDES"
+            />
+            <hr/>
+            <MenuToggle
+              onClick={() => handleMenuToggle(setmenuVisibleCorreoContacto, menuVisibleCorreoContacto, 'Correo')}
+              isVisible={menuVisibleCorreoContacto}
+              buttonText="Correo"
+              sectionName="ADMINISTRADOR - CORREO"
+            />
+            <hr/>
           </div>
-          <button className="menu-toggle" onClick={toggleMenuAcercaDe}>
-            {menuVisibleAcercaDe ? 'Collapse Menu Acerca De' : 'Expand Menu Acerca De'}
-          </button>
-          {menuVisibleAcercaDe && (
-            <div className="collapsible-menu">
-              <AdminInfo />
-            </div>
-          )}
-          <button className="menu-toggle" onClick={toggleMenuAddArtWork}>
-            {menuVisibleAddArtWork ? 'Collapse Menu AddArtWork' : 'Expand Menu AddArtWork'}
-          </button>
-          {menuVisibleAddArtWork && (
-            <div className="collapsible-menu">
-              <AddArtWork />
-            </div>
-          )}
-          <button className="menu-toggle" onClick={toggleMenuAddMedia}>
-            {menuVisibleAddMedia ? 'Collapse Menu AddMedia' : 'Expand Menu AddMedia'}
-          </button>
-          {menuVisibleAddMedia && (
-            <div className="collapsible-menu">
-              <AddMedia />
-            </div>
-          )}
-          <button className="menu-toggle" onClick={toggleMenuRedSocial}>
-            {menuVisibleRedSocial ? 'Collapse Menu Red Social' : 'Expand Menu Red Social'}
-          </button>
-          {menuVisibleRedSocial && (
-            <div className="collapsible-menu">
-              <AddRedSocial />
-            </div>
-          )}
-          <button className="menu-toggle" onClick={toggleMenuCorreoContacto}>
-            {menuVisibleCorreoContacto ? 'Collapse Menu Correo Contacto' : 'Expand Menu Correo Contacto'}
-          </button>
-          {menuVisibleCorreoContacto && (
-            <div className="collapsible-menu">
-              <CorreoContacto />
-            </div>
-          )}
+
+          {menuVisibleAcercaDe && <AdminInfo />}
+          {menuVisibleArtWorkAdmin && <ArtWorkAdmin />}
+          {menuVisibleMediaAdmin && <MediaAdmin />}
+          {menuVisibleRedSocial && <RedSocialAdmin />}
+          {menuVisibleCorreoContacto && <CorreoContacto />}
         </div>
       </div>
     </div>

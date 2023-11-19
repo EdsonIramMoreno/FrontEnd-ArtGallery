@@ -18,17 +18,31 @@ import {
 import '../assets/CSS/NavbarStyle.css'
 
 function NavBar() {
+  //TODO: 
+  const [isAdmin, setIsAdmin] = useState(true);
+
+
+  const handleLogout = () => {
+    console.log('Logging out...');
+    setIsAdmin(false);
+  };
+
   return (
     <Router>
+      
       <nav className="ClassNavBar">
-        <li className='NombreNav'><Link to="/Home">NOMBRE</Link></li>
+        <li className='NombreNav'><Link to="/Administracion">NOMBRE</Link></li>
         <ul className="menu">
-          <li><Link to="/Home">HOME</Link></li>
           <li><Link to="/AcercaDe">ACERCA DE</Link></li>
           <li><Link to="/Artwork">ARTWORK</Link></li>
           <li><Link to="/Media">MEDIA</Link></li>
           <li><Link to="/Contacto">CONTACTO</Link></li>
-          {/* Eliminar despues */}
+          {isAdmin && (
+          <>
+            <li><Link to="/Administracion">ADMIN</Link></li>
+            <li onClick={handleLogout}>LOG-OUT</li>
+          </>
+        )}
 
         </ul>
       </nav>

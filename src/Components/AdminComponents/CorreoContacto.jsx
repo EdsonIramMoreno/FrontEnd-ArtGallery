@@ -28,20 +28,20 @@ function CorreoContacto() {
 
   return (
     <div className='Body3'>
-      <div className="Contenido">
-        <div className='EditNombre'>
-          <h2>Correo Contacto</h2>
-          <input
-            type="text"
-            value={correo}
-            onChange={handleCorreoChange}
-          />
-        </div>
+      <div className="AdminInfo-card">
+          <div className='EditNombreC'>
+            <label htmlFor="">Ingrese un correo</label>
+            <input
+              type="text"
+              value={correo}
+              onChange={handleCorreoChange}
+            />
+            <button className="BotonAddArtwork a" onClick={handleEditCorreoContacto}>Editar correo</button>
+
+          </div>
+
       </div>
 
-      <div className="EditCorreo">
-        <button onClick={handleEditCorreoContacto}>Edit Email</button>
-      </div>
     </div>
   );
 }

@@ -33,3 +33,20 @@
     align-items: flex-start;
     flex-direction: column;
 } */
+
+.social-media-list{
+    display: flex;
+}
+
+.social-media-item {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.social-media-item img{
+    box-shadow: 0px 0px 0px;
+    height: auto;
+    width: auto;
+    margin: 0px
+}

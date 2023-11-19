@@ -1,29 +1,28 @@
 /* Video.css */
 .video-container {
-    position: relative;
-    align-content: center;
-    width: 100%;
-    padding-bottom: 55%; /* 16:9 aspect ratio for responsive scaling */
-    text-align: center;
-  }
-  
-  iframe {
-    position: absolute;
-    top: 15%;
-    left: 15%;
-    width: 100%;
-    height: 100%;
-    align-tracks: center;
-  }
-  
-  .titleVideo {
-    align-items: center;
-    position: absolute;
-    margin: 0;
-    color: #fff; /* Adjust the color if needed */
-    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
-    padding: 10px; /* Add padding for better visibility */
-    left: 2.5%;
-    width: 90%; /* Make the title span the full width */
-  }
-  
+  position: relative;
+  width: 100%;
+  padding-bottom: 55%; /* 16:9 aspect ratio for responsive scaling */
+  text-align: center;
+}
+
+iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Video.css */
+.titleVideo {
+  position: absolute;
+  margin: 0;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1px;
+  width: 100%;
+  bottom: 0;
+  text-align: center;
+  z-index: 1;
+}

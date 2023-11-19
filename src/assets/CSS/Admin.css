@@ -1,12 +1,138 @@
+hr {
+  width: 90%;
+}
+
+.mi-componente {
+  transition: opacity 0.5s ease-in-out;
+  opacity: 0;
+}
+
+.mi-componente.visible {
+  opacity: 1;
+}
+
+.admb {
+  width: 100%;
+  height: 84%;
+}
+
+.Body2 {
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-content: center;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 10px;
+}
+
+.ContenidoAdm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 500px;
+  background-image: linear-gradient(rgb(255, 201, 102, 0.25) 100%, rgb(255, 253, 230) 10%), url("../img/Fondo.jpg");
+  /* background: linear-gradient(rgba(255, 253, 230, 0.8), rgba(255, 253, 230, 0.8)), url("../img/Fondo.jpg"); */
+  background-size: cover;
+  background-position: center;
+}
+
+.ContenidoAdm::-webkit-scrollbar {
+  width: 12px;
+}
+
+.ContenidoAdm::-webkit-scrollbar-track {
+  background: #9c9c9c;
+}
+
+.ContenidoAdm::-webkit-scrollbar-thumb {
+  background: #888888;
+}
+
+.ContenidoAdm::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.Pag-name {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: #141414;
+  margin-bottom: 0px;
+  width: 100%;
+}
+
+.Pag-name h2 {
+  color: beige;
+  margin: 0px;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 10px;
+  color: #292929;
+  background: #141414;
+  flex-direction: column;
+  height: 100%;
+}
+
+.buttons-container:hover {
+  background: #141414;
+  transition: background 1s ease;
+}
+
+.menu-toggle-container {
+  margin-right: 10px;
+}
+
+.menu-toggle {
+  padding: 8px 12px;
+  background: #141414;
+  border: none;
+  cursor: pointer;
+  color: beige;
+}
+
 .collapsible-menu {
-    display: block; /* or "flex" or "grid" based on your layout */
-    transition: height 0.3s ease; /* add smooth transition effect */
-    overflow: hidden;
-    height: auto; /* set to the desired initial height or "auto" */
-  }
-  
-  .collapsible-menu.collapsed {
-    height: 0;
-    overflow: hidden;
-  }
-  
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.collapsible-menu h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.EditNombreC {
+  padding: 15px;
+  width: 90%;
+}
+
+.ArtworkDetails{
+  margin: 5px;
+  /* display: flex; */
+}
+
+.ArtworkDetail{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 75%;
+}
+
+.Correo-card{
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.EditHistoriaLeft textarea{
+  height: 260px;
+}

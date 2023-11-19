@@ -11,11 +11,14 @@
   align-content: center;
   font-family: 'Montserrat', sans-serif;
   letter-spacing: 10px;
-  background-color: rgb(255, 253, 230);
+  background-color: rgb(255, 253, 230, 0.1);
 }
 
 body {
-  background-color: rgb(255, 253, 230);
+  /* background-color: rgb(255, 253, 230); */
+  background-image: linear-gradient(rgb(255, 201, 102, 0.25) 100%, rgb(255, 253, 230) 10%), url("../img/Fondo.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
 footer {

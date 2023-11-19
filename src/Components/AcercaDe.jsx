@@ -35,7 +35,23 @@ function AcercaDe() {
                             <h2>NOMBRE</h2>
                             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, unde quaerat? Harum hic repellendus 			sapiente tempore nisi! Earum
                                 non beatae, necessitatibus mollitia porro
-                                eligendi libero, qui corrupti tempore saepe a.</p>
+                                eligendi libero, qui corrupti tempore saepe a.
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, unde quaerat? Harum hic repellendus 			sapiente tempore nisi! Earum
+                                non beatae, necessitatibus mollitia porro
+                                eligendi libero, qui corrupti tempore saepe a.
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, unde quaerat? Harum hic repellendus 			sapiente tempore nisi! Earum
+                                non beatae, necessitatibus mollitia porro
+                                eligendi libero, qui corrupti tempore saepe a.
+
+                                non beatae, necessitatibus mollitia porro
+                                eligendi libero, qui corrupti tempore saepe a.
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, unde quaerat? Harum hic repellendus 			sapiente tempore nisi! Earum
+                                non beatae, necessitatibus mollitia porro
+                                eligendi libero, qui corrupti tempore saepe a.
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, unde quaerat? Harum hic repellendus 			sapiente tempore nisi! Earum
+                                non beatae, necessitatibus mollitia porro
+                                eligendi libero, qui corrupti tempore saepe a.
+                                </p>
                         </div>
                     </div>
                     <SocialMediaList />

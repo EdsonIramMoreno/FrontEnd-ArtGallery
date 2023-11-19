@@ -51,7 +51,7 @@ function AdminInfo() {
   };
 
   return (
-    <div className="Body3">
+    <div className="Body3 admb">
       <div className="AdminInfo-card">
         <div className="Foto-Nmb-card">
           <label htmlFor="artistaImageInput">
@@ -79,7 +79,6 @@ function AdminInfo() {
         </div>
         <div className="EditAcercaDe">
           <div className="EditHistoriaLeft">
-            <h2>Acerca De</h2>
             <textarea
               id="historia"
               placeholder="Historia"
