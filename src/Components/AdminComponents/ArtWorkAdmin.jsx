@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../assets/CSS/AdminStyle.css';
 import AgregarArte from '../../assets/img/AgregarArte.jpg';
 import swal from 'sweetalert';
+import { API_ENDPOINTS_POST } from '../../Api';
 
 function ArtWorkAdmin() {
   const [artworkImage, setArtworkImage] = useState(null);
@@ -9,6 +10,42 @@ function ArtWorkAdmin() {
   const [artworkDescription, setArtworkDescription] = useState('');
   const [mode, setMode] = useState('Agregar');
   const [isFieldDisabled, setisFieldDisabled] = useState(false);
+
+  const [posts, setPosts] = useState([]);
+  const [postsUpdate, setPostsUpdate] = useState([]);
+
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const formattedDate = currentDate.toLocaleDateString(undefined, options);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Make a GET request
+        const response = await fetch('http://localhost:3001/api/post/getAllPosts');
+
+        // Check if the request was successful (status code 200)
+        if (response.ok) {
+          // Parse the response JSON
+          const result = await response.json();
+
+          // Update the state with the fetched data
+          setPosts(result.data);
+
+
+        } else {
+          console.error('Failed to fetch data:', response.status, response.statusText);
+        }
+      } catch (error) {
+        console.error('Error during data fetching:', error);
+        setPosts([]);
+      }
+    };
+
+    // Call the fetchData function when the component mounts
+    fetchData();
+  }, [postsUpdate, posts]);
+
 
   const handleMode = (mode) => {
     setMode(mode);
@@ -41,42 +78,126 @@ function ArtWorkAdmin() {
     }
   };
 
-  const handleGuardarClick = () => {
+  const handleGuardarClick = async () => {
     if (artworkName && artworkDescription && artworkImage) {
-      console.log('Guardar clicked');
-      console.log('Artwork Name:', artworkName);
-      console.log('Artwork Description:', artworkDescription);
-      // TODO: Aquí se mandaría la info a la API
 
-      swal('Agregado!', 'La obra fue agregada correctamente.', 'success');
-      // Se resetean los valores para poder agregar más obras
-      setArtworkImage(null);
-      setArtworkName('');
-      setArtworkDescription('');
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      // TODO: Aquí se mandaría la info a la API
+      try {
+
+        const data = {
+          title: artworkName,
+          desc: artworkDescription,
+          photo: "url",
+          id_user_creation: userData._id,
+          creation_date: formattedDate,
+          id_user_update: userData._id,
+          update_date: formattedDate
+        };
+
+
+        const response = await fetch('http://localhost:3001/api/post/createPost', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (response.status === 200) {
+          swal('Success!', 'Inicio de sesión exitoso', 'success');
+          const responseData = await response.json();
+
+          swal('Agregado!', 'La obra fue agregada correctamente.', 'success');
+
+          // Se resetean los valores para poder agregar más obras
+          setArtworkImage(null);
+          setArtworkName('');
+          setArtworkDescription('');
+
+        } else if (response.status === 401) {
+          console.error('Authentication failed');
+          swal('Oops!', 'Usuario o clave equivocados', 'error');
+        }
+      } catch (error) {
+        console.error('Authentication error:', error);
+        swal('Oops!', 'Error', 'error');
+      }
     } else {
       swal('Oops!', 'Error favor de llenar todos los campos.', 'error');
     }
   };
 
-  const handleEditarClick = () => {
+  const handleEditarClick = async () => {
     if (artworkName && artworkDescription && artworkImage) {
-      console.log('Editar clicked');
-      console.log('Artwork Name:', artworkName);
-      console.log('Artwork Description:', artworkDescription);
-      // TODO: Aquí se mandaría la info a la API
 
-      swal('Editado!', 'La obra fue editada correctamente.', 'success');
-      // Se resetean los valores para poder agregar más obras
-      setArtworkImage(null);
-      setArtworkName('');
-      setArtworkDescription('');
-      setMode("Agregar");
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      // TODO: Aquí se mandaría la info a la API
+      try {
+
+        const data = {
+          title: artworkName,
+          desc: artworkDescription,
+          photo: "url",
+          id_user_creation: userData._id,
+          creation_date: formattedDate,
+          id_user_update: userData._id,
+          update_date: formattedDate
+        };
+
+
+        const response = await fetch(`http://localhost:3001/api/post/updatePost/${postsUpdate._id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (response.status === 200) {
+          swal('Success!', 'Inicio de sesión exitoso', 'success');
+          const responseData = await response.json();
+
+          swal('Editado!', 'La obra fue editada correctamente.', 'success');
+
+          // Se resetean los valores para poder agregar más obras
+          setArtworkImage(null);
+          setArtworkName('');
+          setArtworkDescription('');
+          setMode("Agregar");
+
+          try {
+            // Make a GET request
+            const response = await fetch(API_ENDPOINTS_POST.getPosts);
+
+            // Check if the request was successful (status code 200)
+            if (response.ok) {
+              // Parse the response JSON
+              const result = await response.json();
+
+              // Update the state with the fetched data
+              setPosts(result.data);
+            } else {
+              console.error('Failed to fetch data:', response.status, response.statusText);
+            }
+          } catch (error) {
+            console.error('Error during data fetching:', error);
+            setPosts([]);
+          }
+
+        }
+      } catch (error) {
+        console.error('Authentication error:', error);
+        swal('Oops!', 'Error', 'error');
+      }
     } else {
       swal('Oops!', 'Error favor de llenar todos los campos.', 'error');
     }
+
+
   };
 
-  const handleEliminarClick = () => {
+  const handleEliminarClick = async () => {
     // Lógica para la eliminación, por ejemplo, mostrar un mensaje de confirmación
     swal({
       title: '¿Estás seguro?',
@@ -84,27 +205,92 @@ function ArtWorkAdmin() {
       icon: 'warning',
       buttons: ['Cancelar', 'Eliminar'],
       dangerMode: true,
-    }).then((willDelete) => {
+    }).then(async (willDelete) => {
       if (willDelete) {
         // TODO: Agrega aquí la lógica para la eliminación de la obra
-        swal('Poof! La obra ha sido eliminada.', {
-          icon: 'success',
-        });
-        // Se resetean los valores después de eliminar la obra
-        setArtworkImage(null);
-        setArtworkName('');
-        setArtworkDescription('');
-        setMode("Agregar");
+
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        try {
+
+          const data = {
+            title: artworkName,
+            desc: artworkDescription,
+            photo: "url",
+            id_user_creation: userData._id,
+            creation_date: formattedDate,
+            id_user_update: userData._id,
+            update_date: formattedDate,
+            isActive: false
+          };
+
+          const response = await fetch(`http://localhost:3001/api/post/deletePost/${postsUpdate._id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (response.status === 200) {
+            const responseData = await response.json();
+
+            swal('Poof! La obra ha sido eliminada.', {
+              icon: 'success',
+            });
+
+            // Se resetean los valores para poder agregar más obras
+            setArtworkImage(null);
+            setArtworkName('');
+            setArtworkDescription('');
+            setMode("Agregar");
+
+            try {
+              // Make a GET request
+              const response = await fetch(API_ENDPOINTS_POST.getPosts);
+
+              // Check if the request was successful (status code 200)
+              if (response.ok) {
+                // Parse the response JSON
+                const result = await response.json();
+
+                // Update the state with the fetched data
+                setPosts(result.data);
+              } else {
+                console.error('Failed to fetch data:', response.status, response.statusText);
+              }
+            } catch (error) {
+              console.error('Error during data fetching:', error);
+              setPosts([]);
+            }
+
+          }
+        } catch (error) {
+          console.error('Authentication error:', error);
+          swal('Oops!', 'Error en la autenticación', 'error');
+        }
+
       } else {
         swal('La obra está a salvo.');
       }
     });
   };
 
-  const loadInfo = (id) => {
-    if (id != '0') {
-      setArtworkName(id);
-      setisFieldDisabled(false);
+  const loadInfo = async (selectedValue) => {
+    if (selectedValue !== '0') {
+      const selectedPost = posts.find(post => post._id === selectedValue);
+      // Check if the post is found
+      if (selectedPost) {
+
+        await setPostsUpdate((prevPostsUpdate) => ({
+          ...prevPostsUpdate,
+          ...selectedPost,
+        }));
+
+        setArtworkName(selectedPost.title);
+        setArtworkDescription(selectedPost.desc);
+
+        setisFieldDisabled(false);
+      }
     }
   };
 
@@ -188,10 +374,13 @@ function ArtWorkAdmin() {
                 className="Media-Select Centered"
                 onChange={(e) => loadInfo(e.target.value)}>
                 <option value="0">Selecciona una obra</option>
-                <option value="Obra1">Obra 1</option>
-                <option value="Obra2">Obra 2</option>
-                <option value="Obra3">Obra 3</option>
-                <option value="Obra4">Obra 4</option>
+                {posts
+                  .filter(post => post.isActive)
+                  .map((post) => (
+                    <option key={post._id} value={post._id}>
+                      {post.title}
+                    </option>
+                  ))}
               </select>
               <div className="ArtworkDetails">
                 <div className="MediaDetails">

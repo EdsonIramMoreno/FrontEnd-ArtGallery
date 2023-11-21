@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../assets/CSS/AdminStyle.css';
 import AgregarArte from '../../assets/img/AgregarArte.jpg';
 import swal from 'sweetalert';
+import { API_ENDPOINTS_MEDIA } from '../../Api';
 
 function MediaAdmin() {
   const [mediaName, setMediaName] = useState('');
@@ -9,10 +10,45 @@ function MediaAdmin() {
   const [mode, setMode] = useState('Agregar');
   const [isFieldDisabled, setisFieldDisabled] = useState(false);
 
+  const [media, setMedia] = useState([]);
+  const [mediaUpdate, setMediaUpdate] = useState([]);
+
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const formattedDate = currentDate.toLocaleDateString(undefined, options);
+
   const isYouTubeURL = (url) => {
     const youtubeRegex = /^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/
     return youtubeRegex.test(url);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Make a GET request
+        const response = await fetch('http://localhost:3001/api/media/getAllMedia');
+
+        // Check if the request was successful (status code 200)
+        if (response.ok) {
+          // Parse the response JSON
+          const result = await response.json();
+
+          // Update the state with the fetched data
+          setMedia(result.data);
+
+
+        } else {
+          console.error('Failed to fetch data:', response.status, response.statusText);
+        }
+      } catch (error) {
+        console.error('Error during data fetching:', error);
+        setMedia([]);
+      }
+    };
+
+    // Call the fetchData function when the component mounts
+    fetchData();
+  }, [mediaUpdate, media]);
 
   const handleMode = (mode) => {
     setMode(mode);
@@ -27,43 +63,133 @@ function MediaAdmin() {
     }
   };
 
-  const loadInfo = (id) => {
-    if (id != '0') {
-      setURL(id);
-      setisFieldDisabled(false);
+  const loadInfo = async (selectedValue) => {
+    if (selectedValue !== '0') {
+      const selectedMedia = media.find(m => m._id === selectedValue);
+      if (selectedMedia) {
+        setMediaUpdate(selectedMedia);
+        setMediaName(selectedMedia.title);
+        setURL(selectedMedia.url);
+        setisFieldDisabled(false);
+      }
     }
   };
 
-  const handleGuardarClick = () => {
+  const handleGuardarClick = async () => {
     if (mediaName && url && isYouTubeURL(url)) {
       console.log(mediaName);
       console.log(url);
+      const userData = JSON.parse(localStorage.getItem('userData'));
       // TODO: Aquí se mandaría la info a la API
+      try {
 
-      swal('Agregado!', 'El video fue agregado correctamente.', 'success');
+        const data = {
+          title: mediaName,
+          url: url,
+          id_user_creation: userData._id,
+          creation_date: formattedDate,
+          id_user_update: userData._id,
+          update_date: formattedDate
+        };
+
+
+        const response = await fetch("http://localhost:3001/api/media/createMedia", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (response.status === 200) {
+          swal('Success!', 'Inicio de sesión exitoso', 'success');
+          const responseData = await response.json();
+
+          swal('Agregado!', 'El video fue agregado correctamente.', 'success');
       // Se resetean los valores para poder agregar más videos
       setURL('');
       setMediaName('');
+
+        } else if (response.status === 401) {
+          console.error('Authentication failed');
+          swal('Oops!', 'Usuario o clave equivocados', 'error');
+        }
+      } catch (error) {
+        console.error('Authentication error:', error);
+        swal('Oops!', 'Error', 'error');
+      }
+
+      
     } else {
       swal('Oops!', 'Error favor de llenar todos los campos o ingresar una URL válida de YouTube.', 'error');
     }
   };
 
-  const handleEditarClick = () => {
+  const handleEditarClick = async () => {
     if (mediaName && url && isYouTubeURL(url)) {
-      console.log(mediaName);
-      console.log(url);
-      // TODO: Aquí se mandaría la info a la API
 
-      swal('Editado!', 'El video fue editado correctamente.', 'success');
-      // Se resetean los valores para poder agregar más videos
-      setURL('');
-      setMediaName('');
-      setMode("Agregar");
+  
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      // TODO: Aquí se mandaría la info a la API
+      try {
+        const data = {
+          title: mediaName,
+          url: url,
+          id_user_creation: userData._id,
+          creation_date: formattedDate,
+          id_user_update: userData._id,
+          update_date: formattedDate
+        };
+  
+        const response = await fetch(`http://localhost:3001/api/media/updateMedia/${mediaUpdate._id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+  
+        if (response.status === 200) {
+          swal('Success!', 'Inicio de sesión exitoso', 'success');
+          const responseData = await response.json();
+  
+          swal('Editado!', 'El video fue editado correctamente.', 'success');
+          // Se resetean los valores para poder agregar más videos
+          setURL('');
+          setMediaName('');
+          setMode('Agregar');
+  
+          try {
+            // Make a GET request
+            const response = await fetch('http://localhost:3001/api/media/getAllMedia');
+  
+            // Check if the request was successful (status code 200)
+            if (response.ok) {
+              // Parse the response JSON
+              const result = await response.json();
+  
+              // Update the state with the fetched data
+              setMedia(result.data);
+            } else {
+              console.error('Failed to fetch data:', response.status, response.statusText);
+            }
+          } catch (error) {
+            console.error('Error during data fetching:', error);
+            setMedia([]);
+          }
+        } else {
+          console.error('Failed to update media:', response.status, response.statusText);
+          swal('Oops!', 'Error al editar el video', 'error');
+        }
+      } catch (error) {
+        console.error('Error during media update:', error);
+        swal('Oops!', 'Error al editar el video', 'error');
+      }
     } else {
       swal('Oops!', 'Error favor de llenar todos los campos o ingresar una URL válida de YouTube.', 'error');
     }
   };
+  
 
   const handleEliminarClick = () => {
     swal({
@@ -72,15 +198,64 @@ function MediaAdmin() {
       icon: 'warning',
       buttons: ['Cancelar', 'Eliminar'],
       dangerMode: true,
-    }).then((willDelete) => {
+    }).then(async (willDelete) => {
       if (willDelete) {
         // TODO: Agrega aquí la lógica para la eliminación del video
-        swal('Poof! El video ha sido eliminado.', {
-          icon: 'success',
-        });
-        setURL('');
-        setMediaName('');
-        setMode("Agregar");
+
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        try {
+
+          const data = {
+            title: mediaName,
+            url: url,
+            id_user_creation: userData._id,
+            creation_date: formattedDate,
+            id_user_update: userData._id,
+            update_date: formattedDate
+          };
+
+          const response = await fetch(`http://localhost:3001/api/media/deleteMedia/${mediaUpdate._id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (response.status === 200) {
+            const responseData = await response.json();
+
+            swal('Poof! El video ha sido eliminado.', {
+              icon: 'success',
+            });
+            setURL('');
+            setMediaName('');
+            setMode("Agregar");
+
+            try {
+              // Make a GET request
+              const response = await fetch(API_ENDPOINTS_MEDIA.getMedia);
+
+              // Check if the request was successful (status code 200)
+              if (response.ok) {
+                // Parse the response JSON
+                const result = await response.json();
+
+                // Update the state with the fetched data
+                setMedia(result.data);
+              } else {
+                console.error('Failed to fetch data:', response.status, response.statusText);
+              }
+            } catch (error) {
+              console.error('Error during data fetching:', error);
+              setPosts([]);
+            }
+
+          }
+        } catch (error) {
+          console.error('Authentication error:', error);
+          swal('Oops!', 'Error en la autenticación', 'error');
+        }
       } else {
         swal('El video está a salvo.');
       }
@@ -143,10 +318,13 @@ function MediaAdmin() {
               className="Media-Select Centered"
               onChange={(e) => loadInfo(e.target.value)}>
               <option value="0">Selecciona un video</option>
-              <option value="video1">Video 1</option>
-              <option value="video2">Video 2</option>
-              <option value="video3">Video 3</option>
-              <option value="video4">Video 4</option>
+              {media
+                  .filter(m => m.isActive)
+                  .map((m) => (
+                    <option key={m._id} value={m._id}>
+                      {m.title}
+                    </option>
+                  ))}
             </select>
 
             <div className='ArtworkDetails'>

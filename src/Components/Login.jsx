@@ -1,25 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import NavBar from './Navbar';
+import { Link,useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 import '../assets/CSS/Login.css';
 import MosaicoImage from '../assets/img/Mosaico.png';
+import { API_ENDPOINTS_USER } from '../Api';
 import swal from 'sweetalert';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
+  const navigate=useNavigate();
 
   useEffect(() => {
-    // Simula una demora antes de mostrar el componente
-    const timeout = setTimeout(() => {
-      setVisible(true);
-    }, 100); // Cambia esto al tiempo de carga deseado
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      navigate('/Administracion');
+    } else {
+      // Simulate a delay before showing the component
+      const timeout = setTimeout(() => {
+        setVisible(true);
+      }, 100);
 
-    return () => {
-      clearTimeout(timeout);
-    };
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
   }, []);
+
 
   const isEmailValid = (emailVal) => {
     // Regular expression for basic email validation
@@ -44,10 +52,10 @@ function Login() {
 
       const data = {
         email: email,
-        password: password,
+        pwd: password,
       };
 
-      const response = await fetch('http://localhost:3000/login', {
+      const response = await fetch('http://localhost:3001/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +65,15 @@ function Login() {
 
       if (response.status === 200) {
         swal('Success!', 'Inicio de sesión exitoso', 'success');
-        // Handle successful login here, e.g., redirect to another page
+        const responseData = await response.json();
+
+        localStorage.setItem('userData', JSON.stringify(responseData.data));
+
+        //
+
+        window.location.href = '/Administracion';
+        navigate('/Administracion');
+
       } else if (response.status === 401) {
         console.error('Authentication failed');
         swal('Oops!', 'Usuario o clave equivocados', 'error');

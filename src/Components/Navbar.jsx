@@ -56,7 +56,7 @@ function NavBar() {
         <Route path="/Contacto" element={<Contacto />}></Route>
 
 
-        <Route path="/details/:id/:name/:image" element={<Details />} />
+        <Route path="/details/:id" element={<ObraDetails />} />
 
         {/* Eliminar despues */}
         <Route path="/Administracion" element={<Admin />}></Route>
