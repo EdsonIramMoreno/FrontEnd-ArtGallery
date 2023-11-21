@@ -1,49 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import '../../assets/CSS/AdminStyle.css';
 import AgregarArte from '../../assets/img/AgregarArte.jpg';
 import swal from 'sweetalert';
-import { API_ENDPOINTS_SOCIAL_MEDIA } from '../../Api';
 
 function RedSocialAdmin() {
   const [redSocialIcon, setRedSocialIcon] = useState(null);
   const [redSocialName, setRedSocialName] = useState('');
   const [redSocialURL, setRedSocialURL] = useState('');
   const [mode, setMode] = useState('Agregar');
-  const [isFieldDisabled, setisFieldDisabled] = useState(false);
-
-  const [media, setMedia] = useState([]);
-  const [mediaUpdate, setMediaUpdate] = useState([]);
-
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  const formattedDate = currentDate.toLocaleDateString(undefined, options);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Make a GET request
-        const response = await fetch('http://localhost:3001/api/social/getAllSocial');
-
-        // Check if the request was successful (status code 200)
-        if (response.ok) {
-          // Parse the response JSON
-          const result = await response.json();
-
-          // Update the state with the fetched data
-          setMedia(result.data);
-
-        } else {
-          console.error('Failed to fetch data:', response.status, response.statusText);
-        }
-      } catch (error) {
-        console.error('Error during data fetching:', error);
-        setMedia([]);
-      }
-    };
-
-    // Call the fetchData function when the component mounts
-    fetchData();
-  }, [mediaUpdate, media]);
+  const [isFieldDisabled, setisFieldDisabled] = useState(false)
 
   const handleRedSocialIconChange = (event) => {
     const selectedImage = event.target.files[0];
@@ -98,121 +63,36 @@ function RedSocialAdmin() {
     return urlRegex.test(url);
   };
 
-  const handleGuardarClick = async () => {
+  const handleGuardarClick = () => {
     if (redSocialName && redSocialURL && redSocialIcon && isURLValid(redSocialURL)) {
-
-      
-      const userData = JSON.parse(localStorage.getItem('userData'));
+      console.log(redSocialIcon);
+      console.log(redSocialName);
+      console.log(redSocialURL);
       // TODO: Aquí se mandaría la info a la API
-      try {
 
-        const data = {
-          name: redSocialName,
-    url: redSocialURL,
-    icon: "redSocialIcon",
-          id_user_creation: userData._id,
-          creation_date: formattedDate,
-          id_user_update: userData._id,
-          update_date: formattedDate
-        };
-
-
-        const response = await fetch('http://localhost:3001/api/social/createSocial', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (response.status === 200) {
-          swal('Success!', 'Inicio de sesión exitoso', 'success');
-          const responseData = await response.json();
-
-          swal('Agregado!', 'La red social fue agregada correctamente.', 'success');
+      swal('Agregado!', 'La red social fue agregada correctamente.', 'success');
       // Se resetean los valores para poder agregar más obras
       setRedSocialIcon(null);
       setRedSocialName('');
       setRedSocialURL('');
-
-        } else if (response.status === 401) {
-          console.error('Authentication failed');
-          swal('Oops!', 'Usuario o clave equivocados', 'error');
-        }
-      } catch (error) {
-        console.error('Authentication error:', error);
-        swal('Oops!', 'Error', 'error');
-      }
-
-      
     } else {
       swal('Oops!', 'Error favor de llenar todos los campos o ingresar una URL válida.', 'error');
     }
   };
 
-  const handleEditarClick = async () => {
+  const handleEditarClick = () => {
     if (redSocialName && redSocialURL && redSocialIcon && isURLValid(redSocialURL)) {
+      console.log(redSocialIcon);
+      console.log(redSocialName);
+      console.log(redSocialURL);
       // TODO: Aquí se mandaría la info a la API
 
-      const userData = JSON.parse(localStorage.getItem('userData'));
-      // TODO: Aquí se mandaría la info a la API
-      try {
-        const data = {
-          name: redSocialName,
-          url: redSocialURL,
-          icon: "redSocialIcon",
-          id_user_creation: userData._id,
-          creation_date: formattedDate,
-          id_user_update: userData._id,
-          update_date: formattedDate
-        };
-  
-        const response = await fetch(`http://localhost:3001/api/social/updateSocial/${mediaUpdate._id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-  
-        if (response.status === 200) {
-          swal('Success!', 'Inicio de sesión exitoso', 'success');
-          const responseData = await response.json();
-  
-          swal('Editado!', 'La red social fue editada correctamente.', 'success');
+      swal('Editado!', 'La red social fue editada correctamente.', 'success');
       // Se resetean los valores para poder agregar más obras
       setRedSocialIcon(null);
       setRedSocialName('');
       setRedSocialURL('');
       setMode("Agregar")
-  
-          try {
-            // Make a GET request
-            const response = await fetch(API_ENDPOINTS_SOCIAL_MEDIA.getSocialMedia);
-  
-            // Check if the request was successful (status code 200)
-            if (response.ok) {
-              // Parse the response JSON
-              const result = await response.json();
-  
-              // Update the state with the fetched data
-              setMedia(result.data);
-            } else {
-              console.error('Failed to fetch data:', response.status, response.statusText);
-            }
-          } catch (error) {
-            console.error('Error during data fetching:', error);
-            setMedia([]);
-          }
-        } else {
-          console.error('Failed to update media:', response.status, response.statusText);
-          swal('Oops!', 'Error al editar la red social', 'error');
-        }
-      } catch (error) {
-        console.error('Error during media update:', error);
-        swal('Oops!', 'Error al editar la red social', 'error');
-      }
-
     } else {
       swal('Oops!', 'Error favor de llenar todos los campos o ingresar una URL válida.', 'error');
     }
@@ -225,83 +105,26 @@ function RedSocialAdmin() {
       icon: 'warning',
       buttons: ['Cancelar', 'Eliminar'],
       dangerMode: true,
-    }).then(async (willDelete) => {
+    }).then((willDelete) => {
       if (willDelete) {
-
         // TODO: Agrega aquí la lógica para la eliminación del video
-
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        try {
-
-          const data = {
-            name: redSocialName,
-    url: redSocialURL,
-    icon: "redSocialIcon",
-            id_user_creation: userData._id,
-            creation_date: formattedDate,
-            id_user_update: userData._id,
-            update_date: formattedDate
-          };
-
-          const response = await fetch(`http://localhost:3001/api/social/deleteSocial/${mediaUpdate._id}`, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-          });
-
-          if (response.status === 200) {
-            const responseData = await response.json();
-
-            swal('Poof! La red social ha sido eliminado.', {
-              icon: 'success',
-            });
-            setRedSocialIcon(null);
-            setRedSocialName('');
-            setRedSocialURL('');
-            setMode("Agregar");
-
-            try {
-              // Make a GET request
-              const response = await fetch(API_ENDPOINTS_SOCIAL_MEDIA.getSocialMedia);
-
-              // Check if the request was successful (status code 200)
-              if (response.ok) {
-                // Parse the response JSON
-                const result = await response.json();
-
-                // Update the state with the fetched data
-                setMedia(result.data);
-              } else {
-                console.error('Failed to fetch data:', response.status, response.statusText);
-              }
-            } catch (error) {
-              console.error('Error during data fetching:', error);
-              setPosts([]);
-            }
-
-          }
-        } catch (error) {
-          console.error('Authentication error:', error);
-          swal('Oops!', 'Error en la autenticación', 'error');
-        }
+        swal('Poof! La red social ha sido eliminado.', {
+          icon: 'success',
+        });
+        setRedSocialIcon(null);
+        setRedSocialName('');
+        setRedSocialURL('');
+        setMode("Agregar");
       } else {
         swal('La red social está a salvo.');
       }
     });
   };
 
-  const loadInfo = async (selectedValue) => {
-    if (selectedValue !== '0') {
-      const selectedMedia = media.find(m => m._id === selectedValue);
-      if (selectedMedia) {
-        setMediaUpdate(selectedMedia);
-        setRedSocialName(selectedMedia.name);
-        setRedSocialURL(selectedMedia.url);
-        setRedSocialIcon(null);
-        setisFieldDisabled(false);
-      }
+  const loadInfo = (id) => {
+    if (id != '0') {
+      setRedSocialName(id);
+      setisFieldDisabled(false);
     }
   };
 
@@ -377,14 +200,10 @@ function RedSocialAdmin() {
                   className="Media-Select Centered"
                   onChange={(e) => loadInfo(e.target.value)}
                 >
+                  {/* TODO: Aquí se agregarían todas las redes sociales */}
                   <option value="0">Selecciona una red social</option>
-                  {media
-                  .filter(m => m.isActive)
-                  .map((m) => (
-                    <option key={m._id} value={m._id}>
-                      {m.name}
-                    </option>
-                  ))}
+                  <option value="redSocial1">Red Social 1</option>
+                  <option value="redSocial2">Red Social 2</option>
                 </select>
 
                 <input
