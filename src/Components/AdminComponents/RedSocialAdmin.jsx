@@ -63,14 +63,48 @@ function RedSocialAdmin() {
     return urlRegex.test(url);
   };
 
-  const handleGuardarClick = () => {
+  const handleGuardarClick = async () => {
     if (redSocialName && redSocialURL && redSocialIcon && isURLValid(redSocialURL)) {
       console.log(redSocialIcon);
       console.log(redSocialName);
       console.log(redSocialURL);
+
+      const storedUserData = JSON.parse(localStorage.getItem('userData'));
+      console.log(storedUserData.userId)
       // TODO: Aquí se mandaría la info a la API
 
-      swal('Agregado!', 'La red social fue agregada correctamente.', 'success');
+      try{
+
+        const data = {
+          username: redSocialName,
+          url: redSocialURL,
+          icon: "blob",
+          id_user_create: storedUserData.userId,
+          id_user_update: storedUserData.userId
+        }
+
+        const response = await fetch('http://localhost:3001/api/social/createSocial', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+
+        if(response.status === 200){
+          swal('Agregado!', 'La red social fue agregada correctamente.', 'success');
+
+          setRedSocialIcon(null);
+          setRedSocialName('');
+          setRedSocialURL('');
+        }
+
+      }
+      catch(error){
+        console.log(error);
+      }
+
+      
       // Se resetean los valores para poder agregar más obras
       setRedSocialIcon(null);
       setRedSocialName('');

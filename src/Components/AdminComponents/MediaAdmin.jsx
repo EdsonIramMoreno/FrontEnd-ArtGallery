@@ -34,13 +34,40 @@ function MediaAdmin() {
     }
   };
 
-  const handleGuardarClick = () => {
+  const handleGuardarClick = async () => {
     if (mediaName && url && isYouTubeURL(url)) {
       console.log(mediaName);
       console.log(url);
+      const storedUserData = JSON.parse(localStorage.getItem('userData'));
+      console.log(storedUserData.idUser);
       // TODO: Aquí se mandaría la info a la API
 
-      swal('Agregado!', 'El video fue agregado correctamente.', 'success');
+      try{
+
+        const data = {
+          title: mediaName,
+          url: url,
+          id_user_create: storedUserData.userId,
+          id_user_update: storedUserData.userId
+        };
+
+        const response = await fetch("http://localhost:3001/api/media/createMedia", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if(response.status === 200){
+          swal('Agregado!', 'El video fue agregado correctamente.', 'success');
+        }
+
+      }
+      catch(error){
+        console.log(error);
+      }
+
       // Se resetean los valores para poder agregar más videos
       setURL('');
       setMediaName('');

@@ -47,7 +47,7 @@ function Login() {
         password: password,
       };
 
-      const response = await fetch('http://localhost:3000/login', {
+      const response = await fetch('http://localhost:3001/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,6 +58,17 @@ function Login() {
       if (response.status === 200) {
         swal('Success!', 'Inicio de sesión exitoso', 'success');
         // Handle successful login here, e.g., redirect to another page
+
+        const responseData = await response.json();
+        localStorage.setItem('userData', JSON.stringify(responseData));
+
+        window.location.href = '/Administracion';
+        navigate('/Administracion');
+
+        const storedUserData = JSON.parse(localStorage.getItem('userData'));
+        console.log(storedUserData.userId);
+
+
       } else if (response.status === 401) {
         console.error('Authentication failed');
         swal('Oops!', 'Usuario o clave equivocados', 'error');

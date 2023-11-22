@@ -5,12 +5,38 @@ function CorreoContacto() {
   const [correo, setCorreo] = useState('');
 
 
-  const handleEditCorreoContacto = () => {
+  const handleEditCorreoContacto = async () => {
     if (correo && isEmailValid(correo)) {
       console.log(correo);
-      // TODO: Send the information to the API
 
-      swal('Edited!', 'The email was edited successfully.', 'success');
+      const storedUserData = JSON.parse(localStorage.getItem('userData'));
+      console.log(storedUserData.userId);
+
+      // TODO: Send the information to the API
+      // aquí tambien sale bad request no entiendooooo
+
+      try{
+
+        const data = {
+          email: correo
+        }
+
+        const response = await fetch(`http://localhost:3001/api/users/updateEmail/${userId}`,{
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if(response.status === 200){
+          swal('Edited!', 'The email was edited successfully.', 'success');
+        }
+      }
+      catch(error){
+        console.log(error)
+      }
+
     } else {
       swal('Oops!', 'Error, please enter a valid email.', 'error');
     }

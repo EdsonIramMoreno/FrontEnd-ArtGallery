@@ -41,14 +41,41 @@ function ArtWorkAdmin() {
     }
   };
 
-  const handleGuardarClick = () => {
+  const handleGuardarClick = async () => {
     if (artworkName && artworkDescription && artworkImage) {
       console.log('Guardar clicked');
       console.log('Artwork Name:', artworkName);
       console.log('Artwork Description:', artworkDescription);
-      // TODO: Aquí se mandaría la info a la API
 
-      swal('Agregado!', 'La obra fue agregada correctamente.', 'success');
+      const storedUserData = JSON.parse(localStorage.getItem('userData'));
+      console.log('ID', storedUserData.userId);
+      // TODO: Aquí se mandaría la info a la API, agregar un campo desctiption a la tabla posts
+
+      try{
+
+        const data = {
+          title: artworkName,
+          photo: 'blob',
+          id_user_create: storedUserData.userId,
+          id_user_update: storedUserData.userId
+        }
+
+        const response = await fetch('http://localhost:3001/api/post/createPost', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if(response.status === 200){
+          swal('Agregado!', 'La obra fue agregada correctamente.', 'success');
+        }
+      }
+      catch(error){
+        console.log(error);
+      }
+
       // Se resetean los valores para poder agregar más obras
       setArtworkImage(null);
       setArtworkName('');

@@ -10,15 +10,48 @@ function AdminInfo() {
   const [artistaImage, setArtistaImage] = useState(null);
 
 
-  const handleEditAcercaDe = () => {
+  const handleEditAcercaDe = async () => {
     if (nombre && historia) {
       console.log(nombre);
       console.log(historia);
       console.log(artistaImage);
+
+      const storedUserData = JSON.parse(localStorage.getItem('userData'));
+
+      console.log(storedUserData.userId);
+      console.log(storedUserData.userEmail);
       // TODO: Aquí se mandaría la info a la API
 
+      try{
 
-      swal('Editado!', 'La información fue editada correctamente.', 'success');
+        const data = {
+          email: storedUserData.userEmail,
+          artist_name: nombre,
+          resume: historia,
+          photo: "blob",
+          updated_by_user_id: storedUserData.userId
+        }
+
+        console.log(data);
+        // el json lo muestra bien según yo... pero sale bad request ._.
+
+        const response = await fetch('http://localhost:3001/api/about/createAbout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if(response.status === 200){
+          swal('Editado!', 'La información fue editada correctamente.', 'success');
+        }
+
+      }
+      catch(error){
+        console.log(error)
+      }
+
     }
     else {
       swal('Oops!', 'Error favor de llenar todos los campos.', 'error');
