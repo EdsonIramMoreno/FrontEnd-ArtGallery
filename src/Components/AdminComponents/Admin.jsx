@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link,useNavigate } from 'react-router-dom';
 import AdminInfo from '../AdminComponents/AdminInfo';
 import ArtWorkAdmin from '../AdminComponents/ArtWorkAdmin';
 import MediaAdmin from './MediaAdmin';
@@ -17,14 +18,23 @@ function Admin() {
 
   const [currentSection, setCurrentSection] = useState('ADMINISTRADOR');
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setVisible(true);
-    }, 100);
+  const navigate=useNavigate();
 
-    return () => {
-      clearTimeout(timeout);
-    };
+  useEffect(() => {
+    const userData = localStorage.getItem('userData');
+    if (userData == null) {
+      
+      navigate('/LogAdmin');
+    } else {
+      // Simulate a delay before showing the component
+      const timeout = setTimeout(() => {
+        setVisible(true);
+      }, 100);
+
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
   }, []);
 
   const MenuToggle = ({ onClick, isVisible, buttonText, sectionName }) => (
