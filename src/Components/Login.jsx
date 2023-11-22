@@ -66,7 +66,6 @@ function Login() {
         navigate('/Administracion');
 
         const storedUserData = JSON.parse(localStorage.getItem('userData'));
-        console.log(storedUserData.userId);
 
 
       } else if (response.status === 401) {

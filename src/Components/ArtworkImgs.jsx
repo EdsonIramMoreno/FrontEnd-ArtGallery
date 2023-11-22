@@ -31,10 +31,10 @@ function ArtworkGrid() {
 {posts
         .map((post) => (
           <ObraComponent
-            key={post._id}
+            key={post.id}
             name={post.title}
             image={post.photo}
-            id={post._id}
+            id={post.id}
           />
         ))}
 

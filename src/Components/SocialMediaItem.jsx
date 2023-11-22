@@ -7,7 +7,9 @@ function SocialMediaItem(props) {
 
   return (
     <div className="social-media-item" onClick={handleRedirect}>
-      <img src={props.icon} alt={props.name} />
+      <img src={props.icon} 
+      alt={props.name} 
+      style={{ width: '45px', height: '45px', marginRight: '8px' }}/>
       <p>{props.name}</p>
     </div>
   );

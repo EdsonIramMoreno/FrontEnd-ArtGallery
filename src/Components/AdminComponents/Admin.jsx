@@ -87,13 +87,6 @@ function Admin() {
               sectionName="ADMINISTRADOR - REDES"
             />
             <hr/>
-            <MenuToggle
-              onClick={() => handleMenuToggle(setmenuVisibleCorreoContacto, menuVisibleCorreoContacto, 'Correo')}
-              isVisible={menuVisibleCorreoContacto}
-              buttonText="Correo"
-              sectionName="ADMINISTRADOR - CORREO"
-            />
-            <hr/>
           </div>
 
           {menuVisibleAcercaDe && <AdminInfo />}

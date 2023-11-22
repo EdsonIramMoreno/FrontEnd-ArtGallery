@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../assets/CSS/AdminStyle.css';
 import AgregarArte from '../../assets/img/AgregarArte.jpg';
 import swal from 'sweetalert';
+import { sendImage } from '../../firebase';
 
 function RedSocialAdmin() {
   const [redSocialIcon, setRedSocialIcon] = useState(null);
@@ -10,15 +11,50 @@ function RedSocialAdmin() {
   const [mode, setMode] = useState('Agregar');
   const [isFieldDisabled, setisFieldDisabled] = useState(false)
 
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const [media, setMedia] = useState([]);
+  const [mediaUpdate, setMediaUpdate] = useState([]);
+
+  useEffect(() => {
+        // Call the fetchData function when the component mounts
+    fetchData();
+  }, [mediaUpdate, media]);
+
+  const fetchData = async () => {
+    try {
+      // Make a GET request
+      const response = await fetch('http://localhost:3001/api/social/getAllSocial');
+
+      // Check if the request was successful (status code 200)
+      if (response.ok) {
+        // Parse the response JSON
+        const result = await response.json();
+
+        // Update the state with the fetched data
+        setMedia(result);
+
+      } else {
+        console.error('Failed to fetch data:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error during data fetching:', error);
+      setMedia([]);
+    }
+  };
+
+
   const handleRedSocialIconChange = (event) => {
-    const selectedImage = event.target.files[0];
+    const selectedImageFile = event.target.files[0];
+    setSelectedImage(event.target.files[0]);
 
-    if (selectedImage) {
+    if (selectedImageFile) {
       const allowedExtensions = ['jpg', 'jpeg', 'png'];
-      const fileExtension = selectedImage.name.split('.').pop().toLowerCase();
-
+      const fileExtension = selectedImageFile.name.split('.').pop().toLowerCase();
+  
       if (allowedExtensions.includes(fileExtension)) {
-        const newImage = URL.createObjectURL(selectedImage);
+        setSelectedImage(selectedImageFile);
+        const newImage = URL.createObjectURL(selectedImageFile);
         setRedSocialIcon(newImage);
       } else {
         swal('Oops!', 'Error en la extensión del archivo', 'error');
@@ -28,14 +64,16 @@ function RedSocialAdmin() {
   };
 
   const handleRedSocialIconEditChange = (event) => {
-    const selectedImage = event.target.files[0];
+    const selectedImageFile = event.target.files[0];
+    setSelectedImage(event.target.files[0]);
 
-    if (selectedImage) {
+    if (selectedImageFile) {
       const allowedExtensions = ['jpg', 'jpeg', 'png'];
-      const fileExtension = selectedImage.name.split('.').pop().toLowerCase();
-
+      const fileExtension = selectedImageFile.name.split('.').pop().toLowerCase();
+  
       if (allowedExtensions.includes(fileExtension)) {
-        const newImage = URL.createObjectURL(selectedImage);
+        setSelectedImage(selectedImageFile);
+        const newImage = URL.createObjectURL(selectedImageFile);
         setRedSocialIcon(newImage);
       } else {
         swal('Oops!', 'Error en la extensión del archivo', 'error');
@@ -59,26 +97,25 @@ function RedSocialAdmin() {
   };
 
   const isURLValid = (url) => {
-    const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+    const urlRegex = /www\.[^ "]+\.com$/;
     return urlRegex.test(url);
-  };
+};
 
   const handleGuardarClick = async () => {
+    let downloadURL;
     if (redSocialName && redSocialURL && redSocialIcon && isURLValid(redSocialURL)) {
-      console.log(redSocialIcon);
-      console.log(redSocialName);
-      console.log(redSocialURL);
 
       const storedUserData = JSON.parse(localStorage.getItem('userData'));
-      console.log(storedUserData.userId)
       // TODO: Aquí se mandaría la info a la API
+
+      downloadURL = await sendImage(selectedImage);
 
       try{
 
         const data = {
           username: redSocialName,
           url: redSocialURL,
-          icon: "blob",
+          icon: downloadURL.downloadURL,
           id_user_create: storedUserData.userId,
           id_user_update: storedUserData.userId
         }
@@ -103,30 +140,54 @@ function RedSocialAdmin() {
       catch(error){
         console.log(error);
       }
-
-      
-      // Se resetean los valores para poder agregar más obras
-      setRedSocialIcon(null);
-      setRedSocialName('');
-      setRedSocialURL('');
     } else {
       swal('Oops!', 'Error favor de llenar todos los campos o ingresar una URL válida.', 'error');
     }
   };
 
-  const handleEditarClick = () => {
+  const handleEditarClick = async () => {
+    let downloadURL;
     if (redSocialName && redSocialURL && redSocialIcon && isURLValid(redSocialURL)) {
-      console.log(redSocialIcon);
-      console.log(redSocialName);
-      console.log(redSocialURL);
+      // TODO: Aquí se mandaría la info a la API
+      const storedUserData = JSON.parse(localStorage.getItem('userData'));
       // TODO: Aquí se mandaría la info a la API
 
-      swal('Editado!', 'La red social fue editada correctamente.', 'success');
+      downloadURL = await sendImage(selectedImage);
+      try{
+
+        const data = {
+          username: redSocialName,
+          url: redSocialURL,
+          icon: downloadURL.downloadURL,
+          id_user_create: storedUserData.userId,
+          id_user_update: storedUserData.userId
+        }
+
+        const response = await fetch(`http://localhost:3001/api/social/updateSocial/${mediaUpdate.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+
+        if(response.status === 200){
+          swal('Editado!', 'La red social fue editada correctamente.', 'success');
       // Se resetean los valores para poder agregar más obras
       setRedSocialIcon(null);
       setRedSocialName('');
       setRedSocialURL('');
-      setMode("Agregar")
+      setMode("Agregar");
+
+      fetchData();
+        }
+
+      }
+      catch(error){
+        console.log(error);
+      }
+
+      
     } else {
       swal('Oops!', 'Error favor de llenar todos los campos o ingresar una URL válida.', 'error');
     }
@@ -139,26 +200,49 @@ function RedSocialAdmin() {
       icon: 'warning',
       buttons: ['Cancelar', 'Eliminar'],
       dangerMode: true,
-    }).then((willDelete) => {
+    }).then(async (willDelete) => {
       if (willDelete) {
-        // TODO: Agrega aquí la lógica para la eliminación del video
-        swal('Poof! La red social ha sido eliminado.', {
-          icon: 'success',
+
+        const response = await fetch(`http://localhost:3001/api/social/deleteSocial/${mediaUpdate.id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
-        setRedSocialIcon(null);
-        setRedSocialName('');
-        setRedSocialURL('');
-        setMode("Agregar");
+
+        if (response.status === 200) {
+
+          // TODO: Agrega aquí la lógica para la eliminación del video
+          swal('Poof! La red social ha sido eliminado.', {
+            icon: 'success',
+          });
+          setRedSocialIcon(null);
+          setRedSocialName('');
+          setRedSocialURL('');
+          setMode("Agregar");
+
+          fetchData();
+        }
       } else {
         swal('La red social está a salvo.');
       }
     });
   };
 
-  const loadInfo = (id) => {
-    if (id != '0') {
-      setRedSocialName(id);
-      setisFieldDisabled(false);
+  const loadInfo = async (selectedValue) => {
+    console.log(selectedValue)
+    if (selectedValue !== '0') {
+      const selectedMedia = media.find(m => m.id == selectedValue);
+      if (selectedMedia) {
+        console.log(selectedMedia)
+        
+        setMediaUpdate(selectedMedia);
+        setRedSocialName(selectedMedia.username);
+        setRedSocialURL(selectedMedia.url);
+        setRedSocialIcon(selectedMedia.icon);
+
+        setisFieldDisabled(false);
+      }
     }
   };
 
@@ -236,8 +320,12 @@ function RedSocialAdmin() {
                 >
                   {/* TODO: Aquí se agregarían todas las redes sociales */}
                   <option value="0">Selecciona una red social</option>
-                  <option value="redSocial1">Red Social 1</option>
-                  <option value="redSocial2">Red Social 2</option>
+                  {media
+                  .map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.username}
+                    </option>
+                  ))}
                 </select>
 
                 <input

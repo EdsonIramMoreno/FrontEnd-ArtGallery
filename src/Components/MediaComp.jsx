@@ -1,34 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Video from './Video.jsx'
 import '../assets/CSS/Video.css';
 
 function VideoComponent() {
+
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, [videos]);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/media/getAllMedia');
+
+      if (response.ok) {
+        const result = await response.json();
+        setVideos(result);
+      } else {
+        console.error('Failed to fetch data:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error during data fetching:', error);
+      setVideos([]);
+    }
+  };
+
   return (
     <div className="Videos">
 
-      <Video
-        src="https://www.youtube.com/embed/jM8pyBUU-eE?si=MsqYjiIzYpQ7-LJz"
-        title="YouTube video player"
+{videos
+        .map((video) => (
+          <Video
+          src={video.url}
+          title={video.title}
+          />
+        ))}
 
-      />
-
-      <Video
-        src="https://www.youtube.com/embed/jM8pyBUU-eE?si=MsqYjiIzYpQ7-LJz"
-        title="YouTube video player"
-
-      />
-
-      <Video
-        src="https://www.youtube.com/embed/jM8pyBUU-eE?si=MsqYjiIzYpQ7-LJz"
-        title="YouTube video player"
-
-      />
-
-      <Video
-        src="https://www.youtube.com/embed/jM8pyBUU-eE?si=MsqYjiIzYpQ7-LJz"
-        title="YouTube video player"
-
-      />
+      
     </div>
   );
 }

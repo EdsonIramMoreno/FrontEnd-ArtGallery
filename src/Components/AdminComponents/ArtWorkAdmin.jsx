@@ -65,6 +65,7 @@ function ArtWorkAdmin() {
 
         const data = {
           title: artworkName,
+          //descripcion: artworkDescription,
           photo: downloadURL.downloadURL,
           id_user_create: storedUserData.userId,
           id_user_update: storedUserData.userId
@@ -108,12 +109,12 @@ function ArtWorkAdmin() {
 
         const data = {
           title: artworkName,
+          //descripcion: artworkDescription,
           photo: downloadURL.downloadURL,
           id_user_create: storedUserData.userId,
           id_user_update: storedUserData.userId
         };
 
-        console.log("Toy aquí")
         const response = await fetch(`http://localhost:3001/api/post/updatePost/${postsUpdate.id}`, {
           method: 'PUT',
           headers: {
@@ -155,8 +156,19 @@ function ArtWorkAdmin() {
       icon: 'warning',
       buttons: ['Cancelar', 'Eliminar'],
       dangerMode: true,
-    }).then((willDelete) => {
+    }).then(async (willDelete) => {
       if (willDelete) {
+
+        const response = await fetch(`http://localhost:3001/api/post/deletePost/${postsUpdate.id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.status === 200) {
+
+
         // TODO: Agrega aquí la lógica para la eliminación de la obra
         swal('Poof! La obra ha sido eliminada.', {
           icon: 'success',
@@ -166,6 +178,9 @@ function ArtWorkAdmin() {
         setArtworkName('');
         setArtworkDescription('');
         setMode("Agregar");
+
+        fetchData();
+      }
       } else {
         swal('La obra está a salvo.');
       }
@@ -173,7 +188,6 @@ function ArtWorkAdmin() {
   };
 
   const loadInfo = async (selectedValue) => {
-    console.log("help")
     if (selectedValue !== '0') {
       const selectedPost = posts.find(post => post.id == selectedValue);
       // Check if the post is found

@@ -1,42 +1,67 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../assets/CSS/AdminStyle.css';
 import ArtistaImg from '../../assets/img/ArtistaEjemplo.jpg';
+import { sendImage } from '../../firebase';
 
 function AdminInfo() {
   const [nombre, setNombre] = useState('');
+  const [correo, setCorreo] = useState('');
+  const [about, setAbout] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const [isEditingHistoria, setIsEditingHistoria] = useState(false);
   const [historia, setHistoria] = useState('');
   const [artistaImage, setArtistaImage] = useState(null);
 
+  useEffect(() => {
+    fetchData();
+  }, []); 
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/about/getAbout/1`);
+
+      if (response.ok) {
+        const result = await response.json();
+          const aboutData = result;
+          console.log(aboutData)
+          setAbout(aboutData);
+          setNombre(aboutData.artist_name);
+          setHistoria(aboutData.resume);
+          setCorreo(aboutData.email)
+          setArtistaImage(aboutData.photo);
+        
+      } else {
+        console.error('Failed to fetch data:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error during data fetching:', error);
+      setAbout([]);
+    }
+  };
+
 
   const handleEditAcercaDe = async () => {
-    if (nombre && historia) {
-      console.log(nombre);
-      console.log(historia);
-      console.log(artistaImage);
+    let downloadURL;
+    if (nombre && historia && correo && selectedImage!=null) {
 
       const storedUserData = JSON.parse(localStorage.getItem('userData'));
 
-      console.log(storedUserData.userId);
-      console.log(storedUserData.userEmail);
+      downloadURL = await sendImage(selectedImage);
+
       // TODO: Aquí se mandaría la info a la API
 
       try{
-
         const data = {
-          email: storedUserData.userEmail,
+          email: correo,
           artist_name: nombre,
           resume: historia,
-          photo: "blob",
+          photo: downloadURL.downloadURL,
           updated_by_user_id: storedUserData.userId
         }
 
-        console.log(data);
-        // el json lo muestra bien según yo... pero sale bad request ._.
-
-        const response = await fetch('http://localhost:3001/api/about/createAbout', {
-          method: 'POST',
+        const response = await fetch('http://localhost:3001/api/about/updateAbout/1', {
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -66,16 +91,22 @@ function AdminInfo() {
     setHistoria(event.target.value);
   };
 
-  const handleArtistaImageChange = (event) => {
-    const selectedImageVar = event.target.files[0];
-    if (selectedImageVar) {
-      const allowedExtensions = ['jpg', 'jpeg', 'png'];
-      const fileExtension = selectedImageVar.name.split('.').pop().toLowerCase();
+  const handleCorreoChange = (event) => {
+    setCorreo(event.target.value);
+  };
 
+  const handleArtistaImageChange = (event) => {
+    const selectedImageFile = event.target.files[0];
+    setSelectedImage(event.target.files[0]);
+
+    if (selectedImageFile) {
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+      const fileExtension = selectedImageFile.name.split('.').pop().toLowerCase();
+  
       if (allowedExtensions.includes(fileExtension)) {
-        const newImage = URL.createObjectURL(selectedImageVar);
+        setSelectedImage(selectedImageFile);
+        const newImage = URL.createObjectURL(selectedImageFile);
         setArtistaImage(newImage);
-        setArtistaImage([newImage]);
       } else {
         swal('Oops!', 'Error en la extensión del archivo', 'error');
         setArtistaImage(null);
@@ -120,6 +151,13 @@ function AdminInfo() {
               style={{ resize: 'both', overflow: 'auto', minHeight: '100px' }}
             ></textarea>
           </div>
+
+          <label htmlFor="">Ingrese un correo</label>
+            <input
+              type="text"
+              value={correo}
+              onChange={handleCorreoChange}
+            />
           <div className="EditHistoria">
             <button onClick={handleEditAcercaDe}>Guardar Acerca De</button>
           </div>

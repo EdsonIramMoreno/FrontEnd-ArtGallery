@@ -12,6 +12,18 @@ function AcercaDe() {
     const storedUserData = JSON.parse(localStorage.getItem('userData'))
 
     useEffect(() => {
+      // Call the fetchData function when the component mounts
+      fetchData();
+
+       // Simula una demora antes de mostrar el componente
+       const timeout = setTimeout(() => {
+          setVisible(true);
+      }, 100); // Cambia esto al tiempo de carga deseado
+
+      return () => {
+          clearTimeout(timeout);
+      };
+    }, []); 
 
     const fetchData = async () => {
         try {
@@ -31,19 +43,6 @@ function AcercaDe() {
           setAbout([]);
         }
       };
-  
-      // Call the fetchData function when the component mounts
-      fetchData();
-
-       // Simula una demora antes de mostrar el componente
-       const timeout = setTimeout(() => {
-          setVisible(true);
-      }, 100); // Cambia esto al tiempo de carga deseado
-
-      return () => {
-          clearTimeout(timeout);
-      };
-    }, []); 
 
     return (
         <div className={`mi-componente ${visible ? 'visible' : ''}`}>
@@ -55,7 +54,7 @@ function AcercaDe() {
                     </div>
                     <div className="Info">
                         <div className="FotoArtista">
-                            <img src={ArtistaImg} alt="Artista" />
+                            <img src={about.photo} alt="Artista" />
                         </div>
                         <div className="InfoArtista">
                             <h2>{about.artist_name}</h2>

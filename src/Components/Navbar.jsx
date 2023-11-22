@@ -18,20 +18,38 @@ import {
 import '../assets/CSS/NavbarStyle.css'
 
 function NavBar() {
-  //TODO: 
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const storedUserData = JSON.parse(localStorage.getItem('userData'));
+
+    if (storedUserData) {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+
+    
+  }, []);
 
 
   const handleLogout = () => {
-    console.log('Logging out...');
+    sessionStorage.removeItem('userData');
+
+    // Remove the item from localStorage
+    localStorage.removeItem('userData');
+
+    const userData = localStorage.getItem('userData');
+
     setIsAdmin(false);
+    window.location.href = '/AcercaDe';
   };
 
   return (
     <Router>
       
       <nav className="ClassNavBar">
-        <li className='NombreNav'><Link to="/Administracion">NOMBRE</Link></li>
+        <li className='NombreNav'><Link to="/Artwork">Espacio Caordico</Link></li>
         <ul className="menu">
           <li><Link to="/AcercaDe">ACERCA DE</Link></li>
           <li><Link to="/Artwork">ARTWORK</Link></li>
@@ -56,7 +74,7 @@ function NavBar() {
         <Route path="/Contacto" element={<Contacto />}></Route>
 
 
-        <Route path="/details/:id/:name/:image" element={<Details />} />
+        <Route path="/details/:id" element={<Details />} />
 
         {/* Eliminar despues */}
         <Route path="/Administracion" element={<Admin />}></Route>
