@@ -65,10 +65,10 @@ function ArtWorkAdmin() {
 
         const data = {
           title: artworkName,
-          //descripcion: artworkDescription,
           photo: downloadURL.downloadURL,
           id_user_create: storedUserData.userId,
-          id_user_update: storedUserData.userId
+          id_user_update: storedUserData.userId,
+          description: artworkDescription
         }
 
         const response = await fetch('http://localhost:3001/api/post/createPost', {
@@ -109,10 +109,10 @@ function ArtWorkAdmin() {
 
         const data = {
           title: artworkName,
-          //descripcion: artworkDescription,
           photo: downloadURL.downloadURL,
           id_user_create: storedUserData.userId,
-          id_user_update: storedUserData.userId
+          id_user_update: storedUserData.userId,
+          description: artworkDescription
         };
 
         const response = await fetch(`http://localhost:3001/api/post/updatePost/${postsUpdate.id}`, {
@@ -200,6 +200,7 @@ function ArtWorkAdmin() {
 
         setArtworkName(selectedPost.title);
         setArtworkImage(selectedPost.photo);
+        setArtworkDescription(selectedPost.description);
 
         setisFieldDisabled(false);
       }

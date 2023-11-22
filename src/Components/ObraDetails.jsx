@@ -52,7 +52,7 @@ function Details() {
             </div>
 
             <div className='Card-Descript'>
-              <p>post.descripcion</p>
+              <p>{post.description}</p>
             </div>
 
           </div>
