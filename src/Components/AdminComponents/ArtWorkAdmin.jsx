@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../assets/CSS/AdminStyle.css';
 import AgregarArte from '../../assets/img/AgregarArte.jpg';
 import swal from 'sweetalert';
+import { sendImage } from '../../firebase';
 
 function ArtWorkAdmin() {
   const [artworkImage, setArtworkImage] = useState(null);
@@ -9,6 +10,15 @@ function ArtWorkAdmin() {
   const [artworkDescription, setArtworkDescription] = useState('');
   const [mode, setMode] = useState('Agregar');
   const [isFieldDisabled, setisFieldDisabled] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const [posts, setPosts] = useState([]);
+  const [postsUpdate, setPostsUpdate] = useState([]);
+
+  useEffect(() => {
+    // Call the fetchData function when the component mounts
+    fetchData();
+  }, [postsUpdate, posts]);
 
   const handleMode = (mode) => {
     setMode(mode);
@@ -25,7 +35,7 @@ function ArtWorkAdmin() {
   };
 
   const handleArtworkImageChange = (event) => {
-    const selectedImage = event.target.files[0];
+    setSelectedImage(event.target.files[0]);
 
     if (selectedImage) {
       const allowedExtensions = ['jpg', 'jpeg', 'png'];
@@ -42,20 +52,20 @@ function ArtWorkAdmin() {
   };
 
   const handleGuardarClick = async () => {
+    
+    let downloadURL;
     if (artworkName && artworkDescription && artworkImage) {
-      console.log('Guardar clicked');
-      console.log('Artwork Name:', artworkName);
-      console.log('Artwork Description:', artworkDescription);
 
       const storedUserData = JSON.parse(localStorage.getItem('userData'));
-      console.log('ID', storedUserData.userId);
       // TODO: Aquí se mandaría la info a la API, agregar un campo desctiption a la tabla posts
+
+      downloadURL = await sendImage(selectedImage);
 
       try{
 
         const data = {
           title: artworkName,
-          photo: 'blob',
+          photo: downloadURL.downloadURL,
           id_user_create: storedUserData.userId,
           id_user_update: storedUserData.userId
         }
@@ -85,22 +95,56 @@ function ArtWorkAdmin() {
     }
   };
 
-  const handleEditarClick = () => {
+  const handleEditarClick = async () => {
+    let downloadURL;
     if (artworkName && artworkDescription && artworkImage) {
-      console.log('Editar clicked');
-      console.log('Artwork Name:', artworkName);
-      console.log('Artwork Description:', artworkDescription);
-      // TODO: Aquí se mandaría la info a la API
 
-      swal('Editado!', 'La obra fue editada correctamente.', 'success');
-      // Se resetean los valores para poder agregar más obras
-      setArtworkImage(null);
-      setArtworkName('');
-      setArtworkDescription('');
-      setMode("Agregar");
+      const storedUserData = JSON.parse(localStorage.getItem('userData'));
+
+      downloadURL = await sendImage(selectedImage);
+
+      // TODO: Aquí se mandaría la info a la API
+      try {
+
+        const data = {
+          title: artworkName,
+          photo: downloadURL.downloadURL,
+          id_user_create: storedUserData.userId,
+          id_user_update: storedUserData.userId
+        };
+
+        console.log("Toy aquí")
+        const response = await fetch(`http://localhost:3001/api/post/updatePost/${postsUpdate.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (response.status === 200) {
+          swal('Success!', 'Inicio de sesión exitoso', 'success');
+          const responseData = await response.json();
+
+          swal('Editado!', 'La obra fue editada correctamente.', 'success');
+
+          // Se resetean los valores para poder agregar más obras
+          setArtworkImage(null);
+          setArtworkName('');
+          setArtworkDescription('');
+          setMode("Agregar");
+
+          fetchData();
+
+        }
+      } catch (error) {
+        console.error('Authentication error:', error);
+        swal('Oops!', 'Error', 'error');
+      }
     } else {
       swal('Oops!', 'Error favor de llenar todos los campos.', 'error');
     }
+
   };
 
   const handleEliminarClick = () => {
@@ -128,10 +172,45 @@ function ArtWorkAdmin() {
     });
   };
 
-  const loadInfo = (id) => {
-    if (id != '0') {
-      setArtworkName(id);
-      setisFieldDisabled(false);
+  const loadInfo = async (selectedValue) => {
+    console.log("help")
+    if (selectedValue !== '0') {
+      const selectedPost = posts.find(post => post.id == selectedValue);
+      // Check if the post is found
+      if (selectedPost) {
+
+        await setPostsUpdate((prevPostsUpdate) => ({
+          ...prevPostsUpdate,
+          ...selectedPost,
+        }));
+
+        setArtworkName(selectedPost.title);
+        setArtworkImage(selectedPost.photo);
+
+        setisFieldDisabled(false);
+      }
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      // Make a GET request
+      const response = await fetch('http://localhost:3001/api/post/getAllPosts');
+
+      // Check if the request was successful (status code 200)
+      if (response.ok) {
+        // Parse the response JSON
+        const result = await response.json();
+
+        // Update the state with the fetched data
+        setPosts(result);
+
+      } else {
+        console.error('Failed to fetch data:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error during data fetching:', error);
+      setPosts([]);
     }
   };
 
@@ -215,10 +294,12 @@ function ArtWorkAdmin() {
                 className="Media-Select Centered"
                 onChange={(e) => loadInfo(e.target.value)}>
                 <option value="0">Selecciona una obra</option>
-                <option value="Obra1">Obra 1</option>
-                <option value="Obra2">Obra 2</option>
-                <option value="Obra3">Obra 3</option>
-                <option value="Obra4">Obra 4</option>
+                {posts
+                  .map((post) => (
+                    <option key={post.id} value={post.id}>
+                      {post.title}
+                    </option>
+                  ))}
               </select>
               <div className="ArtworkDetails">
                 <div className="MediaDetails">

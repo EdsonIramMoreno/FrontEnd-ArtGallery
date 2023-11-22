@@ -13,38 +13,37 @@ function AcercaDe() {
 
     useEffect(() => {
 
+    const fetchData = async () => {
+        try {
+          const response = await fetch(`http://localhost:3001/api/about/getAbout/1`);
+  
 
-        // no me sale nada ni en la consola efe
-        const fetchAboutData = async () => {
-            try{
-                const response = await fetch(`http://localhost:3001/api/about/getAbout/${storedUserData.userId}`, {
-                    method:'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                      }
-                });
-
-                if(response.ok){
-                    const result = await response.json();
-                    const aboutData = result.data[0];
-                    setAbout(aboutData);
-                    console.log(aboutData);
-                }
-            }
-            catch(error){
-                console.log(error);
-            }
+          if (response.ok) {
+            const result = await response.json();
+         
+              setAbout(result);
+            
+          } else {
+            console.error('Failed to fetch data:', response.status, response.statusText);
+          }
+        } catch (error) {
+          console.error('Error during data fetching:', error);
+          setAbout([]);
         }
+      };
+  
+      // Call the fetchData function when the component mounts
+      fetchData();
 
-        // Simula una demora antes de mostrar el componente
-        const timeout = setTimeout(() => {
-            setVisible(true);
-        }, 100); // Cambia esto al tiempo de carga deseado
+       // Simula una demora antes de mostrar el componente
+       const timeout = setTimeout(() => {
+          setVisible(true);
+      }, 100); // Cambia esto al tiempo de carga deseado
 
-        return () => {
-            clearTimeout(timeout);
-        };
-    }, []);
+      return () => {
+          clearTimeout(timeout);
+      };
+    }, []); 
 
     return (
         <div className={`mi-componente ${visible ? 'visible' : ''}`}>
